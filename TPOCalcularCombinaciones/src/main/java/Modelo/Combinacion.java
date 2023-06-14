@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class Combinacion {
     private ArrayList<Operadores> operadores;
-    private ArrayList<Integer> numeros;
+    private ArrayList<Double> numeros;
 
-    public Combinacion(ArrayList<Operadores> operadores, ArrayList<Integer> numeros) {
+    public Combinacion(ArrayList<Operadores> operadores, ArrayList<Double> numeros) {
         this.operadores = operadores;
         this.numeros = numeros;
     }
@@ -15,7 +15,7 @@ public class Combinacion {
         return operadores;
     }
 
-    public ArrayList<Integer> getNumeros() {
+    public ArrayList<Double> getNumeros() {
         return numeros;
     }
 }
