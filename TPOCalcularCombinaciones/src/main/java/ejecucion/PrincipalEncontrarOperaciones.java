@@ -14,21 +14,25 @@ public class PrincipalEncontrarOperaciones {
         numeros.add(4);
         numeros.add(2);
         numeros.add(3);
-        numeros.add(5);
-        numeros.add(6);
-        numeros.add(1);
-        numeros.add(7);
+        numeros.add(38);
+        numeros.add(55);
+        numeros.add(46);
+        numeros.add(15);
+        numeros.add(37);
+        numeros.add(25);
+        numeros.add(190);
         ArrayList<Operadores> operadores = new ArrayList<Operadores>();
         operadores.add(Operadores.SUMA);
         operadores.add(Operadores.MULTI);
         operadores.add(Operadores.RESTA);
+
         int cantNum = 4;
-        int resultadoABuscar = 10;
+        int resultadoABuscar = 16;
         ArrayList<String> resultado = operaciones.obtenerOperaciones(numeros, operadores, cantNum, resultadoABuscar);
 
         if (resultado != null) {
             int i = 0;
-            System.out.println("Las operaciones resultantes que cumplan con "+resultadoABuscar+" son:");
+            System.out.println("Las operaciones resultantes que cumplan con " + resultadoABuscar + " son:");
             while (i < resultado.size()) {
                 System.out.println(resultado.get(i));
                 i++;
@@ -37,8 +41,5 @@ public class PrincipalEncontrarOperaciones {
         else {
             System.out.println("El resultado arrojado es nulo");
         }
-
-
     }
-
 }
