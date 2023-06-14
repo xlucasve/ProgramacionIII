@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="EncontrarOperaciones">
+    <CLASSES />
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/librerias/EncontrarOperaciones.jar!/" />
+    </SOURCES>
+  </library>
+</component>
