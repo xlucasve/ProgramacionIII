@@ -13,7 +13,7 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
                                                 int valorBuscado) {
         ArrayList<Combinacion> combinacionesObtenidas = new ArrayList<>();
         if (numerosUsar <= listaNumeros.size()){
-            if(listaOperadores.size()+1 <= listaNumeros.size()){
+            if(listaOperadores.size()+1 <= numerosUsar){
                 ArrayList<Double> numerosDouble = new ArrayList<>();
                 ArrayList<Integer> numerosUsados = new ArrayList<>();
                 for (int i = 0; i < listaNumeros.size(); i++){

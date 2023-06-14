@@ -15,10 +15,14 @@ public class PrincipalEncontrarOperaciones {
         numeros.add(2);
         numeros.add(3);
         numeros.add(5);
+        numeros.add(6);
+        numeros.add(1);
+        numeros.add(7);
         ArrayList<Operadores> operadores = new ArrayList<Operadores>();
         operadores.add(Operadores.SUMA);
         operadores.add(Operadores.MULTI);
-        int cantNum = 3;
+        operadores.add(Operadores.RESTA);
+        int cantNum = 4;
         int resultadoABuscar = 10;
         ArrayList<String> resultado = operaciones.obtenerOperaciones(numeros, operadores, cantNum, resultadoABuscar);
 
