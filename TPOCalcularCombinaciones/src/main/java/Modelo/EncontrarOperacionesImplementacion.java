@@ -1,5 +1,6 @@
 package Modelo;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class EncontrarOperacionesImplementacion implements EncontrarOperacionesInterface {
@@ -51,8 +52,53 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
             }
             System.out.println("");
         }
+
+        combinacionesString = obtenerCadenasDeCombinaciones(combinaciones);
         return combinacionesString;
 
+    }
+
+    private ArrayList<String> obtenerCadenasDeCombinaciones(ArrayList<Combinacion> combinaciones) {
+        ArrayList<String> cadenasDeCombinaciones = new ArrayList<>();
+        for (Combinacion combinacion: combinaciones) {
+            int i = 0;
+            int numeroActual = 0;
+            int operadorActual = 0;
+            String cadenaOperacion = "";
+            ArrayList<Double> numeros = combinacion.getNumeros();
+            ArrayList<Operadores> operadores = combinacion.getOperadores();
+            while (i < numeros.size() + operadores.size()) {
+                if (i % 2 == 0) {
+                    cadenaOperacion += numeros.get(numeroActual);
+                    numeroActual += 1;
+                } else {
+                    cadenaOperacion += obtenerCaracter(String.valueOf(operadores.get(operadorActual)));
+                    operadorActual += 1;
+                }
+                i += 1;
+            }
+            cadenasDeCombinaciones.add(cadenaOperacion);
+        }
+        return cadenasDeCombinaciones;
+    }
+
+    private String obtenerCaracter(String operador) {
+        String caracter = "";
+        switch(operador) {
+            case "SUMA":
+                caracter = "+";
+                break;
+            case "RESTA":
+                caracter = "-";
+                break;
+            case "DIV":
+                caracter = "/";
+                break;
+            case "MULTI":
+                caracter = "*";
+                break;
+        }
+        return caracter;
     }
 
     private ArrayList<Combinacion> buscarCombinaciones(ArrayList<Combinacion> combinaciones, Integer numerosUsar, Integer valorBuscado, ArrayList<Operadores> listaOperadores,

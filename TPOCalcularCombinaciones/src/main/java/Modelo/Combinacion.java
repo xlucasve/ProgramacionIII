@@ -6,6 +6,10 @@ public class Combinacion {
     private ArrayList<Operadores> operadores;
     private ArrayList<Double> numeros;
 
+    public ArrayList<Double> getNumeros(ArrayList<Operadores> operadores) {
+        return this.numeros;
+    }
+
     public Combinacion(ArrayList<Operadores> operadores, ArrayList<Double> numeros) {
         this.operadores = operadores;
         this.numeros = numeros;

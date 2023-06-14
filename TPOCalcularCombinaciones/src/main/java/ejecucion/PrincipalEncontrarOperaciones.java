@@ -14,6 +14,7 @@ public class PrincipalEncontrarOperaciones {
         numeros.add(4);
         numeros.add(2);
         numeros.add(3);
+        numeros.add(5);
         ArrayList<Operadores> operadores = new ArrayList<Operadores>();
         operadores.add(Operadores.SUMA);
         operadores.add(Operadores.MULTI);
