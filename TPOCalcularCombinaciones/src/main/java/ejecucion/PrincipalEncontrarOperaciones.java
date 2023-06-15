@@ -14,17 +14,17 @@ public class PrincipalEncontrarOperaciones {
         numeros.add(4);
         numeros.add(2);
         numeros.add(3);
-        numeros.add(38);
-        numeros.add(55);
-        numeros.add(46);
-        numeros.add(15);
-        numeros.add(37);
-        numeros.add(25);
-        numeros.add(190);
+        numeros.add(8);
+        numeros.add(-5);
+        numeros.add(0);
+        numeros.add(5);
+        numeros.add(7);
+        numeros.add(5);
+        numeros.add(10);
         ArrayList<Operadores> operadores = new ArrayList<Operadores>();
         operadores.add(Operadores.SUMA);
         operadores.add(Operadores.MULTI);
-        operadores.add(Operadores.RESTA);
+        operadores.add(Operadores.DIV);
 
         int cantNum = 4;
         int resultadoABuscar = 16;

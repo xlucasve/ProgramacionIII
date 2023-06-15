@@ -1,6 +1,5 @@
 package Modelo;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class EncontrarOperacionesImplementacion implements EncontrarOperacionesInterface {
@@ -96,9 +95,9 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
 
 
         if (etapaOperadores == listaOperadores.size()) {
-            //if (!podar(valorBuscado, listaOperadores, ordenOperadores, listaNumeros, ordenNumeros, etapaNumeros)) {
+            //if (!podar(valorBuscado, ordenOperadores, listaNumeros, ordenNumeros, etapaNumeros)) {
                 if (Objects.equals(etapaNumeros, numerosUsar)) {
-                    Double valorEncontrado = calcularCombinacion(valorBuscado, ordenOperadores, ordenNumeros);
+                    Double valorEncontrado = calcularCombinacion(ordenOperadores, ordenNumeros);
                     if (valorEncontrado.intValue() == valorBuscado) {
                         ArrayList<Operadores> guardarOp = new ArrayList<>();
                         ArrayList<Double> guardarNum = new ArrayList<>();
@@ -118,7 +117,7 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
                 }*/
             } else {
                 for (int j = 0; j < listaNumeros.size(); j++) {
-                    if (puedeUsarse(listaNumerosUsados, j)) {
+                    if (puedeUsarseNumeros(listaNumerosUsados, listaNumeros, etapaNumeros, j, ordenOperadores)) {
                         marcarUsadoNumeros(j, listaNumeros, listaNumerosUsados, ordenNumeros);
                         buscarCombinaciones(combinaciones, numerosUsar, valorBuscado, listaOperadores, listaOperadoresUsados,
                                 ordenOperadores, listaNumeros, listaNumerosUsados, ordenNumeros,
@@ -146,6 +145,21 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
 
     private boolean puedeUsarse(ArrayList<Integer> usados, int quieroUsar){
         return usados.get(quieroUsar) == 0;
+    }
+
+    private boolean puedeUsarseNumeros(ArrayList<Integer> usados, ArrayList<Double> numeros, int etapaNumeros,  int quieroUsar, ArrayList<Operadores> ordenOperadores){
+        if (usados.get(quieroUsar) == 0){
+            if (etapaNumeros == 0){
+                return true;
+            }
+            else if(numeros.get(quieroUsar) == 0){ //PODA DE 0
+                return ordenOperadores.get(etapaNumeros-1) != Operadores.DIV;
+            }
+            else{
+                return true;
+            }
+        }
+        return false;
     }
 
     private void marcarUsadoNumeros(Integer x, ArrayList<Double> listaNumeros, ArrayList<Integer> listaNumerosUsados,
@@ -179,7 +193,7 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
 
     }
 
-    private Double calcularCombinacion(int valorBuscado, ArrayList<Operadores> operadores, ArrayList<Double> numeros){
+    private Double calcularCombinacion(ArrayList<Operadores> operadores, ArrayList<Double> numeros){
         ArrayList<Double> numerosAux = new ArrayList<>();
         for (int i = 0; i < numeros.size(); i++){
             numerosAux.add(Double.valueOf(numeros.get(i)));
@@ -236,18 +250,88 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
         }
     }
 
-/*    private boolean podar(int valorBuscado, ArrayList<Operadores> operadores, ArrayList<Operadores> ordenOperadores,
+
+    //TODO: REALIZAR ALGORITMO PODA
+    //TODO: CASO RESULTADO ACTUAL DA MENOR A BUSCADO: MAXIMIZAR (ORDENAR NUMEROS)
+    //TODO: CASO RESULTADO ACTUAL DA MAYOR A BUSCADO: MINIMIZAR (ORDENAR OPERADORES)
+    private boolean podar(int valorBuscado, ArrayList<Operadores> ordenOperadores,
                           ArrayList<Double> numeros, ArrayList<Double> ordenNumeros, int etapaNum) {
         if (etapaNum > 0) {
             ArrayList<Operadores> operadoresAux = new ArrayList<>();
             for (int i = 0; i < ordenNumeros.size() - 1; i++) {
                 operadoresAux.add(ordenOperadores.get(i));
             }
-            Double x = calcularCombinacion(valorBuscado, operadoresAux, ordenNumeros);
-            System.out.println("X : " + x);
-            //Realizar calculo del valor Actual calcularCombinacion(op, num)
-            return true;
+            Double x = calcularCombinacion(operadoresAux, ordenNumeros);
+            if (x < valorBuscado){
+                return  maximizarPoda(valorBuscado, ordenOperadores, ordenNumeros);
+            }
+            else{
+                return minimizarPoda(valorBuscado, ordenOperadores, ordenNumeros);
+            }
         }
-        return true;
-    }*/
+        return false;
+    }
+
+    private boolean maximizarPoda(int valorBuscado, ArrayList<Operadores> operadores, ArrayList<Double> numeros){
+        mergeSortMaxAMin(numeros, 0, numeros.size()-1);
+        return false;
+    }
+
+    private boolean minimizarPoda(int valorBuscado, ArrayList<Operadores> operadores, ArrayList<Double> numeros){
+        //TODO: ORDENAR OPERADORES (/ -  + *)
+        mergeSortMaxAMin(numeros, 0, numeros.size()-1);
+        return false;
+    }
+
+    public void mergeSortMaxAMin(ArrayList<Double> arrayToSort, int start, int end) {
+
+        if (start < end && (end - start) >= 1) {
+            int midElement = (end + start) / 2;
+
+            mergeSortMaxAMin(arrayToSort, start, midElement);
+            mergeSortMaxAMin(arrayToSort, midElement + 1, end);
+
+            mergeElementsMaxAMin(arrayToSort, start, midElement, end);
+        }
+    }
+
+    public void mergeElementsMaxAMin(ArrayList<Double> arrayToSort, int start, int mid, int end) {
+
+        ArrayList<Double> tempArr = new ArrayList<>();
+
+        int getLeftIndex = start;
+        int getRightIndex = mid + 1;
+
+        while (getLeftIndex <= mid && getRightIndex <= end) {
+
+            if (arrayToSort.get(getLeftIndex) >= arrayToSort.get(getRightIndex)) {
+
+                tempArr.add(arrayToSort.get(getLeftIndex));
+                getLeftIndex++;
+
+            } else {
+
+                tempArr.add(arrayToSort.get(getRightIndex));
+                getRightIndex++;
+
+            }
+        }
+
+        while (getLeftIndex <= mid) {
+            tempArr.add(arrayToSort.get(getLeftIndex));
+            getLeftIndex++;
+        }
+
+        while (getRightIndex <= end) {
+            tempArr.add(arrayToSort.get(getRightIndex));
+            getRightIndex++;
+        }
+
+
+        for (int i = 0; i < tempArr.size(); start++) {
+            arrayToSort.set(start, tempArr.get(i++));
+
+        }
+
+    }
 }
