@@ -18,8 +18,10 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
     public ArrayList<String> obtenerOperaciones(ArrayList<Integer> listaNumeros, ArrayList<Operadores> listaOperadores, int numerosUsar,
                                                 int valorBuscado) {
         ArrayList<Combinacion> combinacionesObtenidas = new ArrayList<>();
+        ArrayList<String> combinacionesObtenidasString = new ArrayList<>();
+
         if (numerosUsar <= listaNumeros.size()){
-            if(listaOperadores.size()+1 <= numerosUsar){
+            if(listaOperadores.size()+1 == numerosUsar){
                 ArrayList<Double> numerosDouble = new ArrayList<>();
                 ArrayList<Integer> numerosUsados = new ArrayList<>();
                 for (int i = 0; i < listaNumeros.size(); i++){
@@ -39,9 +41,15 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
 
                 combinacionesObtenidas = buscarCombinaciones(combinacionesObtenidas, numerosUsar, valorBuscado, listaOperadores, operadoresUsados, ordenOperadores,
                         numerosDouble, numerosUsados, ordenNumeros, etapaOperadores, etapaNumeros);
+                combinacionesObtenidasString = pasarCombinacionAString(combinacionesObtenidas);
+
             }
+            else{
+                System.out.println("No hay suficientes operadores para comenzar");
+            }
+        }else{
+            System.out.println("No hay suficientes numeros para comenzar");
         }
-        ArrayList<String> combinacionesObtenidasString = pasarCombinacionAString(combinacionesObtenidas);
         return combinacionesObtenidasString;
     }
 
@@ -131,10 +139,13 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
 
 
         if (etapaOperadores == listaOperadores.size()) {
-            //if (!podar(valorBuscado, ordenOperadores, listaNumeros, ordenNumeros, etapaNumeros)) {
+
+
                 if (Objects.equals(etapaNumeros, numerosUsar)) {
                     Double valorEncontrado = calcularCombinacion(ordenOperadores, ordenNumeros);
+
                     if (valorEncontrado.intValue() == valorBuscado) {
+
                         ArrayList<Operadores> guardarOp = new ArrayList<>();
                         ArrayList<Double> guardarNum = new ArrayList<>();
                         for (int op = 0; op < ordenOperadores.size(); op++) {
@@ -146,21 +157,21 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
                         Combinacion combinacion = new Combinacion(guardarOp, guardarNum);
                         combinaciones.add(combinacion);
                     }
-               /* }
-                //Camino de poda
-                else {
-                    return combinaciones;
-                }*/
-            } else {
-                for (int j = 0; j < listaNumeros.size(); j++) {
-                    if (puedeUsarseNumeros(listaNumerosUsados, listaNumeros, etapaNumeros, j, ordenOperadores)) {
-                        marcarUsadoNumeros(j, listaNumeros, listaNumerosUsados, ordenNumeros);
-                        buscarCombinaciones(combinaciones, numerosUsar, valorBuscado, listaOperadores, listaOperadoresUsados,
-                                ordenOperadores, listaNumeros, listaNumerosUsados, ordenNumeros,
-                                etapaOperadores, etapaNumeros + 1);
-                        desmarcarUsadoNumeros(j, listaNumerosUsados, ordenNumeros);
+                } else {
+                    //if (!realizarPoda(valorBuscado, ordenOperadores, listaNumeros, listaNumerosUsados, ordenNumeros, etapaNumeros)) {
+
+                        for (int j = 0; j < listaNumeros.size(); j++) {
+                        if (puedeUsarseNumeros(listaNumerosUsados, listaNumeros, etapaNumeros, j, ordenOperadores)) {
+                            marcarUsadoNumeros(j, listaNumeros, listaNumerosUsados, ordenNumeros);
+                            buscarCombinaciones(combinaciones, numerosUsar, valorBuscado, listaOperadores, listaOperadoresUsados,
+                                    ordenOperadores, listaNumeros, listaNumerosUsados, ordenNumeros,
+                                    etapaOperadores, etapaNumeros + 1);
+                            desmarcarUsadoNumeros(j, listaNumerosUsados, ordenNumeros);
+                        }
                     }
-                }
+                /*}else {
+                        return combinaciones;
+                    }*/
             }
         }
         else{
@@ -293,37 +304,87 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
         }
     }
 
-
-    //TODO: REALIZAR ALGORITMO PODA
-    //TODO: CASO RESULTADO ACTUAL DA MENOR A BUSCADO: MAXIMIZAR (ORDENAR NUMEROS)
-    //TODO: CASO RESULTADO ACTUAL DA MAYOR A BUSCADO: MINIMIZAR (ORDENAR OPERADORES)
-    private boolean podar(int valorBuscado, ArrayList<Operadores> ordenOperadores,
-                          ArrayList<Double> numeros, ArrayList<Double> ordenNumeros, int etapaNum) {
+    private boolean realizarPoda (int valorBuscado, ArrayList<Operadores> ordenOperadores,
+                          ArrayList<Double> numeros, ArrayList<Integer> numerosUsados, ArrayList<Double> ordenNumeros, Integer etapaNum) {
         if (etapaNum > 0) {
             ArrayList<Operadores> operadoresAux = new ArrayList<>();
-            for (int i = 0; i < ordenNumeros.size() - 1; i++) {
+            ArrayList<Operadores> operadoresAux2 = new ArrayList<>();
+            ArrayList<Operadores> operadoresAuxCalculo = new ArrayList<>();
+
+            //Copiar operadores a array auxiliar para el calculo de la combinacion
+            //Otra copia de operadores es para el calculo del mayor o minimo valor
+            for (int i = 0; i < ordenOperadores.size(); i++) {
+                if( i < etapaNum-1){
+                    operadoresAuxCalculo.add(ordenOperadores.get(i));
+                }
                 operadoresAux.add(ordenOperadores.get(i));
+                operadoresAux2.add(ordenOperadores.get(i));
             }
-            Double x = calcularCombinacion(operadoresAux, ordenNumeros);
-            if (x < valorBuscado){
-                return  maximizarPoda(valorBuscado, ordenOperadores, ordenNumeros);
+            ArrayList<Double> ordenNumerosAux = new ArrayList<>();
+            ArrayList<Double> ordenNumerosAux2 = new ArrayList<>();
+
+            for (int i = 0; i < ordenNumeros.size(); i++){
+                ordenNumerosAux.add(ordenNumeros.get(i));
+                ordenNumerosAux2.add(ordenNumeros.get(i));
             }
-            else{
-                return minimizarPoda(valorBuscado, ordenOperadores, ordenNumeros);
+
+            //Copio los numeros que todavia puedo usar
+            ArrayList<Double> numerosAux = new ArrayList<>();
+            for (int i = 0; i < numeros.size(); i++) {
+                if (numerosUsados.get(i) != 1) {
+                    numerosAux.add(numeros.get(i));
+                }
             }
+            //Decido si tengo que maximizar o minimizar
+            Double x = calcularCombinacion(operadoresAuxCalculo, ordenNumerosAux);
+
+            if (x.intValue() < valorBuscado){
+                return maximizarPoda(valorBuscado, operadoresAux2, ordenNumerosAux2, etapaNum, numerosAux);
+            }
+            else {
+                return minimizarPoda(valorBuscado, operadoresAux2, ordenNumerosAux2, etapaNum, numerosAux);
+            }
+
         }
         return false;
     }
 
-    private boolean maximizarPoda(int valorBuscado, ArrayList<Operadores> operadores, ArrayList<Double> numeros){
-        mergeSortMaxAMin(numeros, 0, numeros.size()-1);
-        return false;
+    private boolean maximizarPoda(int valorBuscado, ArrayList<Operadores> operadores, ArrayList<Double> ordenNumeros, Integer etapaNumeros, ArrayList<Double> numerosUsar){
+        mergeSortMaxAMin(numerosUsar, 0, numerosUsar.size()-1);
+        //TODO: NUNCA DIVIDIR O MULTIPLICAR POR UN NUMERO NEGATIVO
+        int ultimo = numerosUsar.size()-1;
+        for (int i = etapaNumeros-1; i < operadores.size(); i++){
+            switch (operadores.get(i)){
+                case MULTI, SUMA -> {
+                    ordenNumeros.add(numerosUsar.get(i));
+                }
+                case DIV, RESTA -> {
+                    ordenNumeros.add(numerosUsar.get(ultimo));
+                    ultimo--;
+                }
+            }
+        }
+        Double valorMaximo = calcularCombinacion(operadores, ordenNumeros);
+        return (valorMaximo > valorBuscado);
     }
 
-    private boolean minimizarPoda(int valorBuscado, ArrayList<Operadores> operadores, ArrayList<Double> numeros){
-        //TODO: ORDENAR OPERADORES (/ -  + *)
-        mergeSortMaxAMin(numeros, 0, numeros.size()-1);
-        return false;
+    private boolean minimizarPoda(int valorBuscado, ArrayList<Operadores> operadores, ArrayList<Double> ordenNumeros, Integer etapaNumeros, ArrayList<Double> numerosUsar){
+        mergeSortMaxAMin(numerosUsar, 0, numerosUsar.size()-1);
+        //TODO: NUNCA DIVIDIR O MULTIPLICAR POR UN NUMERO NEGATIVO
+        int ultimo = numerosUsar.size()-1;
+        for (int i = etapaNumeros-1; i < operadores.size(); i++){
+            switch (operadores.get(i)){
+                case DIV, RESTA -> {
+                    ordenNumeros.add(numerosUsar.get(i));
+                }
+                case MULTI, SUMA -> {
+                    ordenNumeros.add(numerosUsar.get(ultimo));
+                    ultimo--;
+                }
+            }
+        }
+        Double valorMinimo = calcularCombinacion(operadores, ordenNumeros);
+        return (valorMinimo < valorBuscado);
     }
 
     public void mergeSortMaxAMin(ArrayList<Double> arrayToSort, int start, int end) {
