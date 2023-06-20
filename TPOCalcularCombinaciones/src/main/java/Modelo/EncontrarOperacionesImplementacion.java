@@ -5,8 +5,15 @@ import java.util.Objects;
 public class EncontrarOperacionesImplementacion implements EncontrarOperacionesInterface {
 
     @Override
-    /*
-     * La salida es un vector con String porque se espera cada operaci�n encontrada que se pase a un string, "15+5/9*4"
+    /**
+     * Funcion auxiliar que recibe listaNumeros, listaOperadores, numerosUsar y valorBuscado.
+     * Valida la cantidad de numeros a usar para la cantidad de numeros proveida.
+     * Valida la cantidad de operadores a usar para la cantidad de numeros proveida.
+     * Finalmente invoca buscarCombinaciones con las estructuras necesarias inicializadas.
+     * @param listaNumeros La lista de numeros que se pueden utilizar.
+     * @param listaOperadores La lista de operadores a utilizar.
+     * @param numerosUsar La cantidad de numeros maxima a usar.
+     * @param valorBuscado El valor al cual la expresion matematica debe equivaler para formar parte de la solucion.
      */
     public ArrayList<String> obtenerOperaciones(ArrayList<Integer> listaNumeros, ArrayList<Operadores> listaOperadores, int numerosUsar,
                                                 int valorBuscado) {
@@ -38,6 +45,12 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
         return combinacionesObtenidasString;
     }
 
+    /**
+     * Dada una lista de combinaciones, muestra por pantalla los operadores y luego los numeros que la componen.
+     * Finalmente devuelve una lista que contiene las mismas combinaciones representadas en cadena.
+     * @param combinaciones La lista de combinaciones.
+     * @return combinacionesString Lista de combinaciones representadas en cadena.
+     */
     private ArrayList<String> pasarCombinacionAString(ArrayList<Combinacion> combinaciones){
         ArrayList<String> combinacionesString;
         combinacionesString = obtenerCadenasDeCombinaciones(combinaciones);
@@ -45,6 +58,12 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
 
     }
 
+    /**
+     * Dada una lista de combinaciones, devuelve una lista de combinaciones representada en cadena para ser mostrada
+     * en pantalla.
+     * @param combinaciones La lista de combinaciones.
+     * @return cadenasDeCombinaciones La lista de combinaciones en cadena.
+     */
     private ArrayList<String> obtenerCadenasDeCombinaciones(ArrayList<Combinacion> combinaciones) {
         ArrayList<String> cadenasDeCombinaciones = new ArrayList<>();
         for (Combinacion combinacion: combinaciones) {
@@ -88,6 +107,23 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
         return caracter;
     }
 
+    /**
+     * Funcion que devuelve todas las expresiones matematicas que al combinar los numeros y operadores dados
+     * resultan igual a un valor buscado.
+     * Inicialmente por cada etapa de operador, si no es la ultima,
+     * @param combinaciones La lista de combinaciones actual que resultan igual al numero buscado.
+     * @param numerosUsar La cantidad de numeros maxima a usar.
+     * @param valorBuscado El valor al cual la expresion matematica debe equivaler para formar parte de la solucion.
+     * @param listaOperadores La lista de operadores a utilizar.
+     * @param listaOperadoresUsados La lista de operadores que ya fueron utilizados.
+     * @param ordenOperadores Lista de operadores en el orden a utilizarse.
+     * @param listaNumeros La lista de numeros que se pueden utilizar.
+     * @param listaNumerosUsados La lista de numeros que ya fueron utilizados.
+     * @param ordenNumeros Lista de numeros en el orden a utilizarse.
+     * @param etapaOperadores La etapa actual (nivel) de operadores.
+     * @param etapaNumeros La etapa actual (nivel) de numeros.
+     * @return
+     */
     private ArrayList<Combinacion> buscarCombinaciones(ArrayList<Combinacion> combinaciones, Integer numerosUsar, Integer valorBuscado, ArrayList<Operadores> listaOperadores,
                                                        ArrayList<Integer> listaOperadoresUsados, ArrayList<Operadores> ordenOperadores,
                                                        ArrayList<Double> listaNumeros, ArrayList<Integer> listaNumerosUsados, ArrayList<Double> ordenNumeros,
@@ -143,6 +179,13 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
 
     }
 
+    /**
+     * Dada una lista de enteros que representa si cada numero fue utilizado (0 = no usado, 1 = usado)
+     * devuelve true si puede usarse, false si ya fue usado.
+     * @param usados La lista de numeros ya utilizados
+     * @param quieroUsar El indice del numero que quiero saber si puede ser utilizado.
+     * @return boolean puedeUsarse
+     */
     private boolean puedeUsarse(ArrayList<Integer> usados, int quieroUsar){
         return usados.get(quieroUsar) == 0;
     }
