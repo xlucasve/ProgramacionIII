@@ -170,8 +170,6 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
                         }
                     }
                 } else {
-                   numeroPoda.incrementar();
-                   System.out.println("Poda nro.) " + numeroPoda.getNumero());
                     return combinaciones;
                 }
             }
