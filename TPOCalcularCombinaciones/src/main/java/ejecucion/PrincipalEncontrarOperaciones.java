@@ -22,13 +22,14 @@ public class PrincipalEncontrarOperaciones {
         numeros.add(2);
 
         ArrayList<Operadores> operadores = new ArrayList<Operadores>();
-        operadores.add(Operadores.SUMA);
+        operadores.add(Operadores.RESTA);
+        operadores.add(Operadores.RESTA);
         operadores.add(Operadores.MULTI);
         operadores.add(Operadores.SUMA);
         operadores.add(Operadores.RESTA);
 
 
-        int cantNum = 5;
+        int cantNum = 6;
         int resultadoABuscar = 25;
         ArrayList<String> resultado = operaciones.obtenerOperaciones(numeros, operadores, cantNum, resultadoABuscar);
 
