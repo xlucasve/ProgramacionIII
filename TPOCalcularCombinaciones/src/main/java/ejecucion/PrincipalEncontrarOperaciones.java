@@ -14,23 +14,14 @@ public class PrincipalEncontrarOperaciones {
         numeros.add(4);
         numeros.add(3);
         numeros.add(2);
-        numeros.add(1);
-        numeros.add(10);
-        numeros.add(8);
-        numeros.add(0);
-        numeros.add(3);
-        numeros.add(2);
+        numeros.add(5);
 
         ArrayList<Operadores> operadores = new ArrayList<Operadores>();
-        operadores.add(Operadores.RESTA);
-        operadores.add(Operadores.RESTA);
         operadores.add(Operadores.MULTI);
         operadores.add(Operadores.SUMA);
-        operadores.add(Operadores.RESTA);
 
-
-        int cantNum = 6;
-        int resultadoABuscar = 25;
+        int cantNum = 4;
+        int resultadoABuscar = 10;
         ArrayList<String> resultado = operaciones.obtenerOperaciones(numeros, operadores, cantNum, resultadoABuscar);
 
         if (resultado != null) {
