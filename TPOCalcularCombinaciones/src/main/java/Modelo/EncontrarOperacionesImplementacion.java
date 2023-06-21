@@ -159,7 +159,7 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
                 }
             } else {
                 //if (!realizarPoda(valorBuscado, ordenOperadores, listaNumeros, listaNumerosUsados, ordenNumeros, etapaNumeros)) {
-                if (!podaSimple(valorBuscado, ordenOperadores, ordenNumeros, etapaNumeros)) {
+               if (!podaSimple(valorBuscado, ordenOperadores, ordenNumeros, etapaNumeros)) {
                     for (int j = 0; j < listaNumeros.size(); j++) {
                         if (puedeUsarseNumeros(listaNumerosUsados, listaNumeros, etapaNumeros, j, ordenOperadores)) {
                             marcarUsadoNumeros(j, listaNumeros, listaNumerosUsados, ordenNumeros);
@@ -170,7 +170,7 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
                         }
                     }
                 } else {
-                    System.out.println("SE REALIZO PODA EN ETAPA: " + etapaNumeros);
+                   System.out.println("PODA EN ETAPA: " + etapaNumeros);
                     return combinaciones;
                 }
             }
