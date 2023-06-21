@@ -141,26 +141,26 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
         if (etapaOperadores == listaOperadores.size()) {
 
 
-                if (Objects.equals(etapaNumeros, numerosUsar)) {
-                    Double valorEncontrado = calcularCombinacion(ordenOperadores, ordenNumeros);
+            if (Objects.equals(etapaNumeros, numerosUsar)) {
+                Double valorEncontrado = calcularCombinacion(ordenOperadores, ordenNumeros);
 
-                    if (valorEncontrado.intValue() == valorBuscado) {
+                if (valorEncontrado.intValue() == valorBuscado) {
 
-                        ArrayList<Operadores> guardarOp = new ArrayList<>();
-                        ArrayList<Double> guardarNum = new ArrayList<>();
-                        for (int op = 0; op < ordenOperadores.size(); op++) {
-                            guardarOp.add(ordenOperadores.get(op));
-                        }
-                        for (int num = 0; num < ordenNumeros.size(); num++) {
-                            guardarNum.add(ordenNumeros.get(num));
-                        }
-                        Combinacion combinacion = new Combinacion(guardarOp, guardarNum);
-                        combinaciones.add(combinacion);
+                    ArrayList<Operadores> guardarOp = new ArrayList<>();
+                    ArrayList<Double> guardarNum = new ArrayList<>();
+                    for (int op = 0; op < ordenOperadores.size(); op++) {
+                        guardarOp.add(ordenOperadores.get(op));
                     }
-                } else {
-                    //if (!realizarPoda(valorBuscado, ordenOperadores, listaNumeros, listaNumerosUsados, ordenNumeros, etapaNumeros)) {
-
-                        for (int j = 0; j < listaNumeros.size(); j++) {
+                    for (int num = 0; num < ordenNumeros.size(); num++) {
+                        guardarNum.add(ordenNumeros.get(num));
+                    }
+                    Combinacion combinacion = new Combinacion(guardarOp, guardarNum);
+                    combinaciones.add(combinacion);
+                }
+            } else {
+                //if (!realizarPoda(valorBuscado, ordenOperadores, listaNumeros, listaNumerosUsados, ordenNumeros, etapaNumeros)) {
+                if (!podaSimple(valorBuscado, ordenOperadores, ordenNumeros, etapaNumeros)) {
+                    for (int j = 0; j < listaNumeros.size(); j++) {
                         if (puedeUsarseNumeros(listaNumerosUsados, listaNumeros, etapaNumeros, j, ordenOperadores)) {
                             marcarUsadoNumeros(j, listaNumeros, listaNumerosUsados, ordenNumeros);
                             buscarCombinaciones(combinaciones, numerosUsar, valorBuscado, listaOperadores, listaOperadoresUsados,
@@ -169,12 +169,13 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
                             desmarcarUsadoNumeros(j, listaNumerosUsados, ordenNumeros);
                         }
                     }
-                /*}else {
-                        return combinaciones;
-                    }*/
+                } else {
+                    System.out.println("SE REALIZO PODA EN ETAPA: " + etapaNumeros);
+                    return combinaciones;
+                }
             }
         }
-        else{
+        else {
             for (int x = 0; x < listaOperadores.size(); x++) {
                 if (puedeUsarse(listaOperadoresUsados, x)) {
                     marcarUsadoOperadores(x, listaOperadores, listaOperadoresUsados, ordenOperadores);
@@ -185,6 +186,7 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
                 }
             }
         }
+
         //Camino de no poda
         return combinaciones;
 
@@ -437,5 +439,45 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
 
         }
 
+    }
+
+    public boolean podaSimple(Integer valorBuscado, ArrayList<Operadores> ordenOperadores, ArrayList<Double> ordenNumeros, Integer etapaNumeros){
+        if (etapaNumeros > 1) {
+            ArrayList<Operadores> ordenOperadoresAux = new ArrayList<>();
+            ArrayList<Double> ordenNumerosAux = new ArrayList<>();
+            for (int i = 0; i < etapaNumeros-1; i++) {
+                ordenOperadoresAux.add(ordenOperadores.get(i));
+            }
+            for (int i = 0; i < ordenNumeros.size(); i++) {
+                ordenNumerosAux.add(ordenNumeros.get(i));
+            }
+
+            Double valorActual = calcularCombinacion(ordenOperadoresAux, ordenNumerosAux);
+
+            if (valorActual > valorBuscado) {
+                return minimizarPodaSimple(ordenOperadores, etapaNumeros);
+            } else if (valorActual < valorBuscado) {
+                return maximizarPodaSimple(ordenOperadores, etapaNumeros);
+            }
+        }
+        return false;
+    }
+
+    public boolean minimizarPodaSimple (ArrayList<Operadores> operadores, Integer etapaNumeros){
+        for (int i = etapaNumeros-1; i < operadores.size(); i++) {
+            if (operadores.get(i) == Operadores.DIV || operadores.get(i) == Operadores.RESTA){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean maximizarPodaSimple (ArrayList<Operadores> operadores, Integer etapaNumeros){
+        for (int i = etapaNumeros-1; i < operadores.size(); i++) {
+            if (operadores.get(i) == Operadores.MULTI || operadores.get(i) == Operadores.SUMA){
+                return false;
+            }
+        }
+        return true;
     }
 }
