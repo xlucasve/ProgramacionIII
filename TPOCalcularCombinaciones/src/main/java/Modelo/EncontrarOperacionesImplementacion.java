@@ -38,14 +38,15 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
                 ArrayList<Operadores> ordenOperadores = new ArrayList<>();
                 Integer etapaOperadores = 0;
                 Integer etapaNumeros = 0;
+                NumeroPoda numeroDePoda = new NumeroPoda(0);
 
                 combinacionesObtenidas = buscarCombinaciones(combinacionesObtenidas, numerosUsar, valorBuscado, listaOperadores, operadoresUsados, ordenOperadores,
-                        numerosDouble, numerosUsados, ordenNumeros, etapaOperadores, etapaNumeros);
+                        numerosDouble, numerosUsados, ordenNumeros, etapaOperadores, etapaNumeros, numeroDePoda);
                 combinacionesObtenidasString = pasarCombinacionAString(combinacionesObtenidas);
 
             }
             else{
-                System.out.println("No hay suficientes operadores para comenzar");
+                System.out.println("No hay suficientes operadores o numeros a usar para comenzar");
             }
         }else{
             System.out.println("No hay suficientes numeros para comenzar");
@@ -135,7 +136,7 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
     private ArrayList<Combinacion> buscarCombinaciones(ArrayList<Combinacion> combinaciones, Integer numerosUsar, Integer valorBuscado, ArrayList<Operadores> listaOperadores,
                                                        ArrayList<Integer> listaOperadoresUsados, ArrayList<Operadores> ordenOperadores,
                                                        ArrayList<Double> listaNumeros, ArrayList<Integer> listaNumerosUsados, ArrayList<Double> ordenNumeros,
-                                                       Integer etapaOperadores, Integer etapaNumeros) {
+                                                       Integer etapaOperadores, Integer etapaNumeros, NumeroPoda numeroPoda) {
 
 
         if (etapaOperadores == listaOperadores.size()) {
@@ -165,12 +166,13 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
                             marcarUsadoNumeros(j, listaNumeros, listaNumerosUsados, ordenNumeros);
                             buscarCombinaciones(combinaciones, numerosUsar, valorBuscado, listaOperadores, listaOperadoresUsados,
                                     ordenOperadores, listaNumeros, listaNumerosUsados, ordenNumeros,
-                                    etapaOperadores, etapaNumeros + 1);
+                                    etapaOperadores, etapaNumeros + 1, numeroPoda);
                             desmarcarUsadoNumeros(j, listaNumerosUsados, ordenNumeros);
                         }
                     }
                 } else {
-                   System.out.println("PODA EN ETAPA: " + etapaNumeros);
+                   numeroPoda.incrementar();
+                   System.out.println("Poda nro.) " + numeroPoda.getNumero());
                     return combinaciones;
                 }
             }
@@ -181,7 +183,7 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
                     marcarUsadoOperadores(x, listaOperadores, listaOperadoresUsados, ordenOperadores);
                     buscarCombinaciones(combinaciones, numerosUsar, valorBuscado, listaOperadores, listaOperadoresUsados,
                             ordenOperadores, listaNumeros, listaNumerosUsados, ordenNumeros,
-                            etapaOperadores + 1, etapaNumeros);
+                            etapaOperadores + 1, etapaNumeros, numeroPoda);
                     desmarcarUsadoOperadores(x, listaOperadoresUsados, ordenOperadores);
                 }
             }
@@ -469,6 +471,7 @@ public class EncontrarOperacionesImplementacion implements EncontrarOperacionesI
                 return false;
             }
         }
+
         return true;
     }
 
